@@ -1,0 +1,28 @@
+services:
+  aura-dashboard:
+    build: .
+    container_name: aura-dashboard
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      - OPENCLAW_TOKEN=${OPENCLAW_TOKEN}
+      - OPENCLAW_GATEWAY_URL=http://openclaw-gateway:18789
+      - DATABASE_URL=${DATABASE_URL}
+      - WORKSPACE_PATH=/home/node/.openclaw/workspace
+    volumes:
+      - openclaw_workspace:/home/node/.openclaw/workspace:ro
+    networks:
+      - internal-openclaw
+      - reshape_default
+
+volumes:
+  openclaw_workspace:
+    external: true
+    name: workspace_openclaw-tasks
+
+networks:
+  internal-openclaw:
+    external: true
+  reshape_default:
+    external: true
